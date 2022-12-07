@@ -26,7 +26,7 @@ To track In-App Events:
 ### Cocoapods:
 
 ```ruby
-pod 'ASAPTY'
+pod 'ASAPTY_SDK'
 ```
 ### Swift Package Manager:
 
