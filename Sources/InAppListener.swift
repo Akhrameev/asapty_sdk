@@ -14,6 +14,17 @@ final public class InAppListener: NSObject, SKPaymentTransactionObserver, SKProd
     private let storage: Storage
     private let network: NetworkWorker
     
+    private var productsRequest: SKProductsRequest? {
+        willSet {
+            productsRequest?.delegate = nil
+            productsRequest?.cancel()
+        }
+        didSet {
+            productsRequest?.delegate = self
+            productsRequest?.start()
+        }
+    }
+    
     init(network: NetworkWorker) {
         self.storage = network.storage
         self.logger = network.logger
@@ -31,8 +42,7 @@ final public class InAppListener: NSObject, SKPaymentTransactionObserver, SKProd
             let productId = $0.payment.productIdentifier
             productsIDs.insert(productId)
         }
-        let productRequest: SKProductsRequest = SKProductsRequest(productIdentifiers: productsIDs)
-        productRequest.delegate = self
+        productsRequest = SKProductsRequest(productIdentifiers: productsIDs)
     }
     
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
